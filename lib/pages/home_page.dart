@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_quizz_superhereo/quizz_hereo.dart';
 
@@ -46,6 +45,24 @@ class _Homepage extends State<Homepage> {
     }
   }
 
+void showScoreDialog() {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text('Puntaje Actual'),
+        content: Text('Puntaje: $score'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final currentQuestion = quizzHereo.questionList[n];
@@ -83,35 +100,58 @@ class _Homepage extends State<Homepage> {
                 ),
               ),
               Divider(),
-              Column(
-                children: options.map((option) {
-                  return Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: MaterialButton(
-                      onPressed: () {
-                        checkAnswer(option);
-                      },
-                      child: Text(
-                        option,
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                      color: Colors.blueGrey,
-                    ),
-                  );
-                }).toList(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Expanded(child: buildOptionButton(options[0]),
+                  ),
+                  Expanded(child: buildOptionButton(options[1]),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Expanded(child: buildOptionButton(options[2]),
+                  ),
+                  Expanded(child: buildOptionButton(options[3]),
+                  ),
+                ],
               ),
               Spacer(),
-              Text(
-                'Score: $score',
-                style: TextStyle(
-                  fontSize: 20,
+              ElevatedButton(
+                onPressed: showScoreDialog,
+                child: Text(
+                  'Score: $score',
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
                 ),
-              ),
+                style: ElevatedButton.styleFrom(
+                   backgroundColor: Colors.blueAccent, // background color
+                  foregroundColor: Colors.white, // text color
+                ),),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget buildOptionButton(String option) {
+    return Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: MaterialButton(
+        onPressed: () {
+          checkAnswer(option);
+        },
+        child: Text(
+          option,
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+        color: Colors.blueAccent,
       ),
     );
   }
